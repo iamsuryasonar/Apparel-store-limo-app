@@ -7,6 +7,7 @@ export const initialiseUser = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const accessToken = await getToken();
+            console.log(accessToken)
 
             if (!accessToken) {
                 return thunkAPI.rejectWithValue("Access token not available");
@@ -42,6 +43,7 @@ export const register = createAsyncThunk(
                     error.response.data.message) ||
                 error.message ||
                 error.toString();
+            console.log(error.response)
             return thunkAPI.rejectWithValue();
         }
     }
@@ -82,8 +84,10 @@ export const logout = createAsyncThunk(
     });
 
 const initialState = {
-    isLoggedIn: false,
+    isAuthenticated: false,
     accessToken: null,
+    loading: false,
+    error: null,
 }
 
 const authSlice = createSlice({
@@ -91,36 +95,59 @@ const authSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
+            .addCase(initialiseUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
             .addCase(initialiseUser.fulfilled, (state, action) => {
-                state.isLoggedIn = true;
+                console.log('fullfilled')
+
+                state.isAuthenticated = true;
                 state.accessToken = action.payload.accessToken;
+                state.loading = false;
+                state.error = null;
             })
             .addCase(initialiseUser.rejected, (state, action) => {
-                state.isLoggedIn = false;
+                console.log('errr')
+                state.isAuthenticated = false;
                 state.accessToken = null;
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(register.pending, (state) => {
+                state.loading = true;
+                state.error = null;
             })
             .addCase(register.fulfilled, (state, action) => {
-                state.isLoggedIn = false;
+                state.isAuthenticated = false;
                 state.accessToken = action.payload.accessToken;
             })
             .addCase(register.rejected, (state, action) => {
-                state.isLoggedIn = false;
+                state.isAuthenticated = false;
                 state.accessToken = null;
+                state.loading = false;
+                state.error = action.payload
+            })
+            .addCase(login.pending, (state) => {
+                state.loading = true;
+                state.error = null;
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.isLoggedIn = true;
+                state.isAuthenticated = true;
                 state.accessToken = action.payload.accessToken;
             })
             .addCase(login.rejected, (state, action) => {
-                state.isLoggedIn = false;
+                state.isAuthenticated = false;
                 state.accessToken = null;
+                state.loading = false;
+                state.error = action.payload
             })
             .addCase(logout.fulfilled, (state, action) => {
-                state.isLoggedIn = false;
+                state.isAuthenticated = false;
                 state.accessToken = null;
             })
             .addCase(logout.rejected, (state, action) => {
-                state.isLoggedIn = false;
+                state.isAuthenticated = false;
                 state.accessToken = null;
             });
     },

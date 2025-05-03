@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Shop from '../screens/Shop';
-import Cart from '../screens/Cart';
-import Account from '../screens/Account';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ShopScreen from '../screens/Shop/ShopScreen';
+import CartScreen from '../screens/Cart/CartScreen';
+import AccountNavigator from './AccountNavigator';
 
-export default function TabNav() {
+function TabNavigator() {
     const Tab = createBottomTabNavigator();
 
     return <Tab.Navigator
@@ -16,8 +16,9 @@ export default function TabNav() {
     >
         <Tab.Screen
             name="shop"
-            component={Shop}
+            component={ShopScreen}
             options={{
+                headerShown: false,
                 tabBarShowLabel: false,
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="home" color={color} size={size} />
@@ -26,8 +27,9 @@ export default function TabNav() {
         />
         <Tab.Screen
             name="cart"
-            component={Cart}
+            component={CartScreen}
             options={{
+                headerShown: false,
                 tabBarShowLabel: false,
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="cart" color={color} size={size} />
@@ -36,8 +38,9 @@ export default function TabNav() {
         />
         <Tab.Screen
             name="account"
-            component={Account}
+            component={AccountNavigator}
             options={{
+                headerShown: false,
                 tabBarShowLabel: false,
                 tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="account" color={color} size={size} />
@@ -47,3 +50,6 @@ export default function TabNav() {
     </Tab.Navigator>
 
 }
+
+
+export default TabNavigator;

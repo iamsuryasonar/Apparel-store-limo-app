@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_URL } from '../utils/constants';
-import {  deleteToken } from "../utils/tokenUtility";
+import { deleteToken } from "../utils/tokenUtility";
 
 const register = (credentials) => {
     return axios.post(API_URL + 'auth/customer_register', credentials)

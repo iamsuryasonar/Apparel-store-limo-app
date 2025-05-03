@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 
-function Product({ route }) {
+function ProductScreen({ route }) {
   const { product } = route.params;
 
   const { name, description, image, sizevariants } = product;
@@ -57,7 +57,7 @@ function Product({ route }) {
   )
 }
 
-export default Product;
+export default ProductScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,36 +1,38 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
     FlatList,
     SafeAreaView,
-    StatusBar,
     StyleSheet,
-    Text,
-    View,
-    Pressable,
-    Touchable,
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native';
 
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../../components/ProductCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_all_cart_items } from '../../store/slices/cartSlice';
+import { get_products } from '../../store/slices/productSlice';
 
-function Shop({ navigation }) {
-    let [products, setProducts] = useState();
-    const [isActive, setIsActive] = useState('home');
-    const API = "https://apparel-store-limo-backend.vercel.app/api/v1/product/public/products?page=0&from=0&to=6000";
+function ShopScreen({ navigation }) {
 
-    async function fetchProducts() {
-        let response = await fetch(API);
-        let data = await response.json();
-        console.log(data.results);
-        setProducts(data.results);
-    }
+    const dispatch = useDispatch();
+    const { products, pagination } = useSelector(state => state.product);
+
+    console.log(products?.products);
 
     useEffect(() => {
-        fetchProducts();
+        dispatch(get_products({
+            page: 0,
+            sort_type: 'ASCENDING',
+            from: 0,
+            to: 6000,
+        }))
     }, [])
 
-    if (!products) return <ActivityIndicator size="large" />
+    useEffect(() => {
+        dispatch(get_all_cart_items());
+    }, [])
+
+    if (!products?.products) return <ActivityIndicator size="large" />
 
     return (
         <>
@@ -80,4 +82,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Shop;
+export default ShopScreen;

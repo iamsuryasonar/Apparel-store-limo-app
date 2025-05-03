@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Pressable, Text, TextInput, View } from 'react-native'
+import { useDispatch } from 'react-redux';
+import { login, register } from '../../store/slices/authSlice';
 
-function Auth() {
+function AuthScreen() {
     const [authMode, setAuthMode] = useState('signin');
 
     return (
@@ -49,13 +51,15 @@ function Auth() {
     )
 }
 
-export default Auth;
+export default AuthScreen;
 
 function SignUp() {
 
+    const dispatch = useDispatch();
+
     const [formData, setFormData] = useState({
-        first_name: '',
-        last_name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
     });
@@ -67,6 +71,10 @@ function SignUp() {
         }))
     }
 
+    function onRegister() {
+        dispatch(register(formData));
+    }
+
     return <View style={{
         flexDirection: 'column',
         gap: 10
@@ -74,7 +82,7 @@ function SignUp() {
         <TextInput
             placeholder='First name'
             placeholderTextColor="#333"
-            onChangeText={text => handleChange('first_name', text)}
+            onChangeText={text => handleChange('firstName', text)}
             style={{
                 borderWidth: 1,
                 color: '#333'
@@ -82,7 +90,7 @@ function SignUp() {
         <TextInput
             placeholder='Last name'
             placeholderTextColor="#333"
-            onChangeText={text => handleChange('last_name', text)}
+            onChangeText={text => handleChange('lastName', text)}
             style={{
                 borderWidth: 1,
                 color: '#333'
@@ -108,7 +116,8 @@ function SignUp() {
             alignSelf: 'center',
             padding: 10,
             borderWidth: 1,
-        }}>
+        }}
+            onPress={() => onRegister()}>
             <Text style={{
                 color: '#333',
             }}>Sign up</Text>
@@ -119,15 +128,20 @@ function SignUp() {
 function SignIn() {
 
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
+        email: 'guest@gmail.com',
+        password: 'sadfasfhjt65fsd',
     });
+
+    const dispatch = useDispatch();
 
     function handleChange(field, value) {
         setFormData(prev => ({
             ...prev,
             [field]: value,
         }))
+    }
+    function onLogIn() {
+        dispatch(login(formData));
     }
 
     return <View style={{
@@ -155,7 +169,8 @@ function SignIn() {
             alignSelf: 'center',
             borderWidth: 1,
             padding: 10,
-        }}>
+        }}
+            onPress={() => onLogIn()}>
             <Text style={{
                 color: '#333',
             }}>Sign in</Text>

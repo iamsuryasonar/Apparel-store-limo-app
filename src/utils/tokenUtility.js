@@ -1,7 +1,9 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const isValidToken = async (token) => {
+    if (!token) return false;
+
     try {
         const decoded = jwtDecode(token);
         const currentTime = Date.now() / 1000;
